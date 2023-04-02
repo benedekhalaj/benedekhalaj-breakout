@@ -23,7 +23,7 @@ public class Breakout extends ApplicationAdapter {
     }
 
     private void createBalls() {
-        Ball e = new Ball(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2, 20, 5, 5);
+        Ball e = new Ball(50, 50, 20, 5, 5);
         balls.add(e);
     }
 

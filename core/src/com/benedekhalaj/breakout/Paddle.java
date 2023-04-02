@@ -7,6 +7,7 @@ public class Paddle {
     private int x;
     private int y;
     private final int width, height;
+    private static final int GAP = 5;
 
     public Paddle(int y, int width, int height) {
         this.x = Gdx.input.getX();
@@ -17,7 +18,6 @@ public class Paddle {
 
     public void update() {
         x = Gdx.input.getX() - (width / 2);
-        y = Gdx.graphics.getHeight() - Gdx.input.getY();
     }
 
     public void draw(ShapeRenderer shapeRenderer) {

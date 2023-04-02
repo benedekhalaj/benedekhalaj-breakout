@@ -1,12 +1,11 @@
 package com.benedekhalaj.breakout;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 public class Ball {
     private int x, y, size, xSpeed, ySpeed;
-    Color color = Color.WHITE;
-
 
     public Ball(int x, int y, int size, int xSpeed, int ySpeed) {
         this.x = x;
@@ -16,16 +15,33 @@ public class Ball {
         this.ySpeed = ySpeed;
     }
 
+    private void reverseXSpeed() {
+        xSpeed = -xSpeed;
+    }
+
+    private void reverseYSpeed() {
+        ySpeed = -ySpeed;
+    }
+
     public void update() {
+        x += xSpeed;
+        y += ySpeed;
+        if (x - size < 0 || x + size > Gdx.graphics.getWidth()) {
+            reverseXSpeed();
+        }
+        if (y - size < 0 || y + size > Gdx.graphics.getHeight()) {
+            reverseYSpeed();
+        }
     }
 
     public void draw(ShapeRenderer shapeRenderer) {
-        shapeRenderer.setColor(color);
         shapeRenderer.circle(x, y, size);
     }
 
     public void checkCollision(Paddle paddle) {
-        color = (collidesWith(paddle)) ? Color.GREEN : Color.WHITE;
+        if (collidesWith(paddle)) {
+            reverseYSpeed();
+        }
     }
 
     private boolean collidesWith(Paddle paddle) {
