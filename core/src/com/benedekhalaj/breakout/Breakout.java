@@ -2,7 +2,6 @@ package com.benedekhalaj.breakout;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
@@ -11,46 +10,77 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 public class Breakout extends ApplicationAdapter {
     ShapeRenderer shapeRenderer;
-    List<Ball> balls = new ArrayList<>();
+    Ball ball;
+    List<Brick> bricks = new ArrayList<>();
     Paddle paddle;
-    Random r = new Random();
+    boolean isBallColliding = false;
 
     @Override
     public void create() {
         shapeRenderer = new ShapeRenderer();
         createBalls();
         createPaddle();
+        createBricks();
     }
 
     private void createBalls() {
-        Ball e = new Ball(50, 50, 20, 5, 5);
-        balls.add(e);
+        ball = new Ball(50, 50, 20, 5, 5);
     }
 
     private void createPaddle() {
         paddle = new Paddle(20, 100, 10);
     }
 
+    private void createBricks() {
+        int blockWidth = 63;
+        int blockHeight = 20;
+        for (int y = Gdx.graphics.getHeight() / 2; y < Gdx.graphics.getHeight(); y += blockHeight + 10) {
+            for (int x = 0; x < Gdx.graphics.getWidth(); x += blockWidth + 10) {
+                bricks.add(new Brick(x, y, blockWidth, blockHeight));
+            }
+        }
+        System.out.println(bricks.size());
+    }
+
     @Override
     public void render() {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-        renderBalls();
+        shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+        isBallColliding = false;
+        renderBall();
         renderPaddle();
+        renderBricks();
+        removeDestroyedBricks();
+        ball.setColliding(isBallColliding);
         shapeRenderer.end();
     }
 
-    private void renderBalls() {
-        balls.forEach(b -> {
-            b.update();
-            b.checkCollision(paddle);
-            b.draw(shapeRenderer);
-        });
+    private void renderBall() {
+        ball.update();
+        ball.draw(shapeRenderer);
     }
 
     private void renderPaddle() {
         paddle.update();
+        if (ball.checkCollision(paddle)) {
+            isBallColliding = true;
+        };
         paddle.draw(shapeRenderer);
     }
 
+    private void renderBricks() {
+        bricks.forEach(brick -> {
+            brick.draw(shapeRenderer);
+            if (ball.checkCollision(brick)) {
+                isBallColliding = true;
+            };
+        });
+    }
+
+    private void removeDestroyedBricks() {
+        List<Brick> bricks = new ArrayList<>(this.bricks);
+        bricks.stream()
+            .filter(Brick::isDestroyed)
+            .forEach(brick -> this.bricks.remove(brick));
+    }
 }
