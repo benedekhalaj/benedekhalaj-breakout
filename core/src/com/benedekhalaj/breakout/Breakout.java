@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
@@ -24,7 +25,7 @@ public class Breakout extends ApplicationAdapter {
     }
 
     private void createBalls() {
-        ball = new Ball(50, 50, 20, 5, 5);
+        ball = new Ball(50, 50, 10, 6, 6);
     }
 
     private void createPaddle() {
@@ -45,10 +46,12 @@ public class Breakout extends ApplicationAdapter {
     @Override
     public void render() {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+        shapeRenderer.setColor(Color.WHITE);
         isBallColliding = false;
         renderBall();
         renderPaddle();
+        shapeRenderer.setColor(Color.RED);
         renderBricks();
         removeDestroyedBricks();
         ball.setColliding(isBallColliding);
