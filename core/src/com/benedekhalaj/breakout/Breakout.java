@@ -25,7 +25,7 @@ public class Breakout extends ApplicationAdapter {
     }
 
     private void createBalls() {
-        ball = new Ball(50, 50, 10, 6, 6);
+        ball = new Ball(50, 50, 10, 3, 3);
     }
 
     private void createPaddle() {

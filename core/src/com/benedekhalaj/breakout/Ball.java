@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 public class Ball {
     private int x, y, size, xSpeed, ySpeed;
     private boolean isColliding;
+    private int brickCounter;
 
     public Ball(int x, int y, int size, int xSpeed, int ySpeed) {
         this.x = x;
@@ -14,6 +15,7 @@ public class Ball {
         this.xSpeed = xSpeed;
         this.ySpeed = ySpeed;
         isColliding = false;
+        brickCounter = 0;
     }
 
     private void reverseXSpeed() {
@@ -32,6 +34,14 @@ public class Ball {
         }
         if (y - size < 0 || y + size > Gdx.graphics.getHeight()) {
             reverseYSpeed();
+        }
+        if (brickCounter >= 5) {
+            brickCounter = 0;
+            if (ySpeed < 0) {
+                ySpeed--;
+            } else {
+                ySpeed++;
+            }
         }
     }
 
@@ -53,6 +63,7 @@ public class Ball {
             isColliding = true;
             reverseYSpeed();
             brick.setDestroyed();
+            brickCounter++;
             return true;
         }
         return false;
