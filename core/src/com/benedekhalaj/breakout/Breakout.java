@@ -10,32 +10,47 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 public class Breakout extends ApplicationAdapter {
-    ShapeRenderer shape;
+    ShapeRenderer shapeRenderer;
     List<Ball> balls = new ArrayList<>();
+    Paddle paddle;
     Random r = new Random();
 
     @Override
     public void create() {
-        shape = new ShapeRenderer();
-        for (int i = 0; i < 10; i++) {
-            balls.add(new Ball(
-                r.nextInt(Gdx.graphics.getWidth()),
-                r.nextInt(Gdx.graphics.getHeight()),
-                r.nextInt(100),
-                r.nextInt(15),
-                r.nextInt(15)
-            ));
-        }
+        shapeRenderer = new ShapeRenderer();
+        createBalls();
+        createPaddle();
+    }
+
+    private void createBalls() {
+        Ball e = new Ball(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2, 20, 5, 5);
+        balls.add(e);
+    }
+
+    private void createPaddle() {
+        paddle = new Paddle(20, 100, 10);
     }
 
     @Override
     public void render() {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        shape.begin(ShapeRenderer.ShapeType.Filled);
+        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+        renderBalls();
+        renderPaddle();
+        shapeRenderer.end();
+    }
+
+    private void renderBalls() {
         balls.forEach(b -> {
             b.update();
-            b.draw(shape);
+            b.checkCollision(paddle);
+            b.draw(shapeRenderer);
         });
-        shape.end();
     }
+
+    private void renderPaddle() {
+        paddle.update();
+        paddle.draw(shapeRenderer);
+    }
+
 }

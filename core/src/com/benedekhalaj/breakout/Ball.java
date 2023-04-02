@@ -1,14 +1,12 @@
 package com.benedekhalaj.breakout;
 
-import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 public class Ball {
-    int x;
-    int y;
-    int size;
-    int xSpeed;
-    int ySpeed;
+    private int x, y, size, xSpeed, ySpeed;
+    Color color = Color.WHITE;
+
 
     public Ball(int x, int y, int size, int xSpeed, int ySpeed) {
         this.x = x;
@@ -19,17 +17,21 @@ public class Ball {
     }
 
     public void update() {
-        x += xSpeed;
-        y += ySpeed;
-        if (x < 0 || x > Gdx.graphics.getWidth()) {
-            xSpeed = -xSpeed;
-        }
-        if (y < 0 || y > Gdx.graphics.getHeight()) {
-            ySpeed = -ySpeed;
-        }
     }
 
-    public void draw(ShapeRenderer shape) {
-        shape.circle(x, y, size);
+    public void draw(ShapeRenderer shapeRenderer) {
+        shapeRenderer.setColor(color);
+        shapeRenderer.circle(x, y, size);
+    }
+
+    public void checkCollision(Paddle paddle) {
+        color = (collidesWith(paddle)) ? Color.GREEN : Color.WHITE;
+    }
+
+    private boolean collidesWith(Paddle paddle) {
+        return x - size <= paddle.getX() + paddle.getWidth() &&
+            x + size >= paddle.getX() &&
+            y - size <= paddle.getY() + paddle.getHeight() &&
+            y + size >= paddle.getY();
     }
 }
