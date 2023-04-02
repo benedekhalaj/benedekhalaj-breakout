@@ -43,8 +43,16 @@ public class Breakout extends ApplicationAdapter {
         System.out.println(bricks.size());
     }
 
+    private void preRender() {
+        if (bricks.isEmpty()) {
+            createBricks();
+            ball.setSize(ball.getSize() - 1);
+        }
+    }
+
     @Override
     public void render() {
+        preRender();
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
         shapeRenderer.setColor(Color.WHITE);

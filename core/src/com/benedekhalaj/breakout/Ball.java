@@ -86,4 +86,12 @@ public class Ball {
     public void setColliding(boolean colliding) {
         isColliding = colliding;
     }
+
+    public int getSize() {
+        return size;
+    }
+
+    public void setSize(int size) {
+        this.size = size;
+    }
 }
